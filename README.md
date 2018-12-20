@@ -4,17 +4,20 @@ This is the boilerplate express rest-api using `https://github.com/fmvilas/swagg
 
 ---
 
-## code structure
+## proprosed code structure
 
 ```
-|- index.js            // This file still contains static code like before.
-|+ api/
- |- index.js           // This file will now e.g. have included the two files in routes.
- |+ routes/
-  |- pet.route.js      // This file contains the code for methods on pets. 
-  |                    // (e.g. getPet, postPet, getPetByPetId). 
-  |- user.route.js     // This file will contain the code for methods on users. 
-                       // (e.g. postUserLogin, getUserByUsername, putUserByUsername, deleteUserByUsername). 
+|+ src/
+ |+ controllers/        // This folder contains controllers
+ |+ libs/               // This folder contains libs, e.g., logger
+ |+ middlewares/        // This folder contains middlewares
+ |+ models/             // This folder contains models
+ |+ services/           // This folder contains services
+ |- config.js           // Configuration file
+ |- routes.js           // All routes are defined here
+ |- routes.test.js      // Test file will have the same name with `.test.js` extension
+|- .env                 // Environment variables
+|- .Dockerfile          // Dockerfile
 ```
 
 ---
