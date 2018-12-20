@@ -31,21 +31,15 @@ router.{{@key}}('{{../../subresource}}', async (req, res, next) => {
   try {
     const result = await {{camelCase ../../../operation_name}}.{{../operationId}}(options)
     {{#ifNoSuccessResponses ../responses}}
-    res.status(200).send(result.data)
+    return res.responseSuccess(200, result.data)
     {{else}}
-    res.status(result.status || 200).send(result.data)
+    return res.responseSuccess(result.status || 200, result.data)
     {{/ifNoSuccessResponses}}
   } catch (err) {
     {{#ifNoErrorResponses ../responses}}
-    return res.status(500).send({
-      status: 500,
-      error: 'Server Error'
-    })
+    return res.responseError(new Error('Server Error'))
     {{else}}
-    return res.status(err.status).send({
-      status: err.status,
-      error: err.error
-    })
+    return res.responseError(err)
     {{/ifNoErrorResponses}}
   }
 })

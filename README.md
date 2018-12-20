@@ -33,7 +33,7 @@ npm i snc -g
 Generate project structure from the sample swagger file.
 
 ```
-snc sample-swagger.yaml -o ./my-express-api -t ./template/
+snc template/swagger.json -o ./my-express-api -t ./template/
 ```
 
 ---
