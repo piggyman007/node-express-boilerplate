@@ -1,7 +1,7 @@
-const express = require('express');
-const {{camelCase operation_name}} = require('../services/{{operation_name}}');
+const express = require('express')
+const {{camelCase operation_name}} = require('../services/{{operation_name}}')
 
-const router = new express.Router();
+const router = new express.Router()
 
 {{#each operation}}
   {{#each this.path}}
@@ -26,31 +26,31 @@ router.{{@key}}('{{../../subresource}}', async (req, res, next) => {
         {{/equal}}
       {{/match}}
     {{/each}}
-  };
+  }
 
   try {
-    const result = await {{camelCase ../../../operation_name}}.{{../operationId}}(options);
+    const result = await {{camelCase ../../../operation_name}}.{{../operationId}}(options)
     {{#ifNoSuccessResponses ../responses}}
-    res.status(200).send(result.data);
+    res.status(200).send(result.data)
     {{else}}
-    res.status(result.status || 200).send(result.data);
+    res.status(result.status || 200).send(result.data)
     {{/ifNoSuccessResponses}}
   } catch (err) {
     {{#ifNoErrorResponses ../responses}}
     return res.status(500).send({
       status: 500,
       error: 'Server Error'
-    });
+    })
     {{else}}
     return res.status(err.status).send({
       status: err.status,
       error: err.error
-    });
+    })
     {{/ifNoErrorResponses}}
   }
-});
+})
 
     {{/validMethod}}
   {{/each}}
 {{/each}}
-module.exports = router;
+module.exports = router

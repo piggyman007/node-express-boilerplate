@@ -19,7 +19,7 @@ module.exports.{{../operationId}} = async (options) => {
   // return {
   //   status: 200, // Or another success code.
   //   data: [] // Optional. You can put whatever you want here.
-  // };
+  // }
   //
   // If an error happens during your business logic implementation,
   // you should throw an error as follows:
@@ -27,13 +27,13 @@ module.exports.{{../operationId}} = async (options) => {
   // throw new Error({
   //   status: 500, // Or another error code.
   //   error: 'Server Error' // Or another error message.
-  // });
+  // })
 
   return {
     status: 200,
     data: '{{../operationId}} ok!'
-  };
-};
+  }
+}
 
     {{/validMethod}}
   {{/each}}
