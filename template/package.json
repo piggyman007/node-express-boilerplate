@@ -18,7 +18,8 @@
     "express": "4.16.4",
     "helmet": "^3.15.0",
     "lodash": "^4.17.11",
-    "swagger-model-validator": "^3.0.5"
+    "swagger-model-validator": "^3.0.5",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "chai": "^4.2.0",

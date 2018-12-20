@@ -6,7 +6,7 @@
 require('dotenv').config()
 
 const http = require('http')
-const app = require('../routes')
+const app = require('../app')
 const config = require('../config')
 const logger = require('../libs/logger')(config.logger)
 
