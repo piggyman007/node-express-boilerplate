@@ -24,5 +24,5 @@ module.exports = (req, res, next) => {
   const errorMessage = validation.GetFormattedErrors()[0].message
   const errorStatus = 400
   log.error({ uuid: req.uuid }, `Error ${errorStatus} (${errorMessage}) on ${req.method} ${req.url} with payload ${req.body}.`)
-  res.status(errorStatus).json({ status: errorStatus, error: errorMessage })
+  return res.status(errorStatus).json({ status: errorStatus, error: errorMessage })
 }

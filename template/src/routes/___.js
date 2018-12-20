@@ -11,7 +11,7 @@ const router = new express.Router()
  * {{{this}}}
  {{/each}}
  */
-router.{{@key}}('{{../../subresource}}', async (req, res, next) => {
+router.{{@key}}('{{../../subresource}}', async (req, res) => {
   const options = {
     {{#each ../parameters}}
       {{#equal this.in "query"}}
