@@ -39,9 +39,9 @@ app.use((req, res, next) => {
  */
 {{#each @root.swagger.endpoints}}
 {{#endsWith @root.swagger.basePath '/'}}
-app.use('{{@root.swagger.basePath}}{{..}}', validate, require('./controllers/{{..}}'))
+app.use('{{@root.swagger.basePath}}{{..}}', validate, require('./routes/{{..}}'))
 {{else}}
-app.use('{{@root.swagger.basePath}}/{{..}}', validate, require('./controllers/{{..}}'))
+app.use('{{@root.swagger.basePath}}/{{..}}', validate, require('./routes/{{..}}'))
 {{/endsWith}}
 {{/each}}
 
