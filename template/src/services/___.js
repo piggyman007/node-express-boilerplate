@@ -32,8 +32,8 @@ module.exports.{{../operationId}} = async (options) => {
   return {
     status: 200,
     data: '{{../operationId}} ok!'
-  }
-}
+  };
+};
 
     {{/validMethod}}
   {{/each}}
