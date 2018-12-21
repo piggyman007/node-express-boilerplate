@@ -21,13 +21,13 @@ app.use((req, res, next) => {
   req.uuid = uuidv1();
 
   res.responseSuccess = (status, data) => {
-    log.debug({ uuid: req.uuid }, 'success');
+    log.info({ uuid: req.uuid, method: req.method, url: req.baseUrl }, `Success ${status}`);
     res.status(status).json(data);
   };
 
   res.responseError = (err) => {
     const status = err.code || 500;
-    log.error({ uuid: req.uuid }, `Error ${status} (${err.message}) on ${req.method} ${req.url} with payload ${req.body}.`);
+    log.error({ uuid: req.uuid, method: req.method, url: req.baseUrl }, `Error ${status} (${err.message}) with payload ${req.body}.`);
     res.status(status).json({ status, error: err.message });
   };
 
@@ -47,14 +47,14 @@ app.use('{{@root.swagger.basePath}}/{{..}}', validate, require('./routes/{{..}}'
 
 // catch 404
 app.use((req, res) => {
-  log.error({ uuid: req.uuid }, `Error 404 on ${req.url}.`);
+  log.error({ uuid: req.uuid, method: req.method, url: req.baseUrl }, `Error 404 on ${req.baseUrl}.`);
   res.status(404).json({ status: 404, error: 'Not found' });
 });
 
 // catch errors
 app.use((err, req, res) => {
   const status = err.status || 500;
-  log.error({ uuid: req.uuid }, `Error ${status} (${err.message}) on ${req.method} ${req.url} with payload ${req.body}.`);
+  log.error({ uuid: req.uuid, method: req.method, url: req.baseUrl }, `Error ${status} (${err.message}) with payload ${req.body}.`);
   res.status(status).json({ status, error: 'Server error' });
 });
 
