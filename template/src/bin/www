@@ -6,35 +6,18 @@
 require('dotenv').config();
 
 const http = require('http');
+const { createTerminus } = require('@godaddy/terminus');
 const app = require('../app');
 const config = require('../config');
 const logger = require('../libs/logger')(config.logger);
 
 /**
- * Get port from environment and store in Express.
- */
-const port = normalizePort(config.port);
-app.set('port', port);
-
-/**
- * Create HTTP server.
- */
-const server = http.createServer(app);
-
-/**
- * Listen on provided port, on all network interfaces.
- */
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
-
-/**
  * Normalize a port into a number, string, or false.
  */
-function normalizePort (val) {
+function normalizePort(val) {
   const port = parseInt(val, 10);
 
-  if (isNaN(port)) {
+  if (Number.isNaN(port)) {
     // named pipe
     return val;
   }
@@ -48,9 +31,50 @@ function normalizePort (val) {
 }
 
 /**
+ * Get port from environment and store in Express.
+ */
+const port = normalizePort(config.port);
+app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+const server = http.createServer(app);
+
+function onSignal() {
+  logger.info('server is starting cleanup');
+  return Promise.all([
+    // your clean logic, like closing database connections
+  ]);
+}
+
+function onShutdown() {
+  logger.info('cleanup finished, server is shutting down');
+}
+
+function healthCheck() {
+  const d = new Date();
+  return Promise.resolve(d);
+}
+
+const options = {
+  // healtcheck options
+  healthChecks: {
+    '/healthcheck': healthCheck
+  },
+
+  // cleanup options
+  timeout: config.shutdownTimeout,
+  onSignal,
+  onShutdown
+};
+
+createTerminus(server, options);
+
+/**
  * Event listener for HTTP server "error" event.
  */
-function onError (error) {
+function onError(error) {
   if (error.syscall !== 'listen') {
     throw error;
   }
@@ -59,24 +83,31 @@ function onError (error) {
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
-  case 'EACCES':
-    logger.fatal(`${bind} requires elevated privileges`);
-    process.exit(1);
-    break;
-  case 'EADDRINUSE':
-    logger.fatal(`${bind} is already in use`);
-    process.exit(1);
-    break;
-  default:
-    throw error;
+    case 'EACCES':
+      logger.fatal(`${bind} requires elevated privileges`);
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      logger.fatal(`${bind} is already in use`);
+      process.exit(1);
+      break;
+    default:
+      throw error;
   }
 }
 
 /**
  * Event listener for HTTP server "listening" event.
  */
-function onListening () {
+function onListening() {
   const addr = server.address();
   const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`;
-  logger.debug(`Listening on ${bind}`);
+  logger.info(`Listening on ${bind}`);
 }
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);

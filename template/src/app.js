@@ -5,10 +5,9 @@ const cors = require('cors');
 const uuidv1 = require('uuid/v1');
 const helmet = require('helmet');
 const config = require('./config');
-const logger = require('./libs/logger');
+const logger = require('./libs/logger')(config.logger);
 const validate = require('./middlewares/validate');
 
-const log = logger(config.logger);
 const app = express();
 
 app.use(bodyParser.json());
@@ -21,13 +20,13 @@ app.use((req, res, next) => {
   req.uuid = uuidv1();
 
   res.responseSuccess = (status, data) => {
-    log.info({ uuid: req.uuid, method: req.method, url: req.baseUrl }, `Success ${status}`);
+    logger.info({ uuid: req.uuid, method: req.method, url: req.baseUrl }, `Success ${status}`);
     res.status(status).json(data);
   };
 
   res.responseError = (err) => {
     const status = err.code || 500;
-    log.error({ uuid: req.uuid, method: req.method, url: req.baseUrl }, `Error ${status} (${err.message}) with payload ${req.body}.`);
+    logger.error({ uuid: req.uuid, method: req.method, url: req.baseUrl }, `Error ${status} (${err.message}) with payload ${req.body}.`);
     res.status(status).json({ status, error: err.message });
   };
 
@@ -47,14 +46,14 @@ app.use('{{@root.swagger.basePath}}/{{..}}', validate, require('./routes/{{..}}'
 
 // catch 404
 app.use((req, res) => {
-  log.error({ uuid: req.uuid, method: req.method, url: req.baseUrl }, `Error 404 on ${req.baseUrl}.`);
+  logger.error({ uuid: req.uuid, method: req.method, url: req.baseUrl }, `Error 404 on ${req.baseUrl}.`);
   res.status(404).json({ status: 404, error: 'Not found' });
 });
 
 // catch errors
 app.use((err, req, res) => {
   const status = err.status || 500;
-  log.error({ uuid: req.uuid, method: req.method, url: req.baseUrl }, `Error ${status} (${err.message}) with payload ${req.body}.`);
+  logger.error({ uuid: req.uuid, method: req.method, url: req.baseUrl }, `Error ${status} (${err.message}) with payload ${req.body}.`);
   res.status(status).json({ status, error: 'Server error' });
 });
 
