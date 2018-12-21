@@ -82,9 +82,11 @@ Select `Schemes` to `HTTP`
 
 Click 'Try it out' button at each APIs.
 
+Or you can simply use `postman` and point the url to `http://localhost:3000`
+
 ---
 
-## How to run unit test and test coverage
+## Running unit test and test coverage
 
 Test coverage configuration is defined at `.nycrc`. You can adjust the threshold there.
 
@@ -93,16 +95,46 @@ To run unit test and test coverage, type
 ```
 npm run cover
 ```
+
+The test coverage report is available at `coverage/lcov-report/index.html`
+
 ---
 
-## How to run linter
+## Running ESLint
 
 This project is based on the airbnb style guide. You can read the document from https://github.com/airbnb/javascript
 
-To run linter, type
+To run eslint, type
 
 ```
 npm run lint
 ```
+
+---
+
+## Health check
+
+You can set your load balance to the url `http://localhost:3000/healthcheck` to perform health check.
+
+The result should look like this
+
+```
+{
+  status: "ok",
+  info: "2018-12-21T16:58:08.091Z"
+}
+```
+
+You can modify the health check response in the function `healthCheck` at `src/bin/www`
+
+---
+
+## Graceful shutdown
+
+If something went wrong, the server should do some clean up operation before terminating.
+
+You can perform this kind of task in the function `onSignal` at `src/bin/www`.
+
+By default the timeout before terminating server is `1000 ms`, you can configure this value by updating `SHUTDOWN_TIMEOUT` in `.env` file
 
 ---
