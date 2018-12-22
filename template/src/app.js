@@ -7,6 +7,7 @@ const helmet = require('helmet');
 const config = require('./config');
 const logger = require('./libs/logger')(config.logger);
 const validate = require('./middlewares/validate');
+const formatter = require('./libs/formatter');
 
 const app = express();
 
@@ -20,13 +21,15 @@ app.use((req, res, next) => {
   req.uuid = uuidv1();
 
   res.responseSuccess = (status, data) => {
-    logger.info({ uuid: req.uuid, method: req.method, url: req.originalUrl }, `Success ${status}`);
+    const logFormat = formatter.formatResponseSuccess(req, status);
+    logger.info(logFormat.details, logFormat.msg);
     res.status(status).json(data);
   };
 
   res.responseError = (err) => {
     const status = err.status || 500;
-    logger.error({ uuid: req.uuid, method: req.method, url: req.originalUrl }, `Error ${status} (${err.message}) with payload ${req.body}.`);
+    const logFormat = formatter.formatResponseError(req, status, err.message);
+    logger.error(logFormat.details, logFormat.msg);
     res.status(status).json({ status, error: err.message });
   };
 
@@ -46,15 +49,20 @@ app.use('{{@root.swagger.basePath}}/{{..}}', validate, require('./routes/{{..}}'
 
 // catch 404
 app.use((req, res) => {
-  logger.error({ uuid: req.uuid, method: req.method, url: req.originalUrl }, `Error 404 on ${req.originalUrl}.`);
-  res.status(404).json({ status: 404, error: 'Not found' });
+  const message = 'Not found';
+  const status = 404;
+  const logFormat = formatter.formatResponseError(req, status, message);
+  logger.error(logFormat.details, logFormat.msg);
+  res.status(404).json({ status, error: message });
 });
 
 // catch errors
 app.use((err, req, res) => {
+  const message = 'Server error';
   const status = err.status || 500;
-  logger.error({ uuid: req.uuid, method: req.method, url: req.originalUrl }, `Error ${status} (${err.message}) with payload ${req.body}.`);
-  res.status(status).json({ status, error: 'Server error' });
+  const logFormat = formatter.formatResponseError(req, status, message);
+  logger.error(logFormat.details, logFormat.msg);
+  res.status(status).json({ status, error: message });
 });
 
 module.exports = app;

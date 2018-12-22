@@ -6,6 +6,7 @@ module.exports = {
     level: process.env.LOG_LEVEL || 'info',
     levels: {
       debug: 'STDOUT',
+      info: 'STDOUT',
       error: 'STDERR'
     }
   }
