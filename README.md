@@ -84,6 +84,8 @@ Click 'Try it out' button at each APIs.
 
 Or you can simply use `postman` and point the url to `http://localhost:3000`
 
+The apis generated from the steps above can validate data by the rule from swagger.json, try to remove some required fields in the request body to test it. You will get some friendly error message related to the missing fields.
+
 ---
 
 ## Running unit test and test coverage
