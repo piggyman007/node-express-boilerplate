@@ -12,7 +12,7 @@ function getParserParameters(method, url) {
 }
 
 function validate(req) {
-  const paramaters = getParserParameters(req.method, req.baseUrl);
+  const paramaters = getParserParameters(req.method, req.originalUrl);
   const { schema } = paramaters[0];
   const body = _.cloneDeep(req.body);
   const validator = new Validator(swagger);
