@@ -25,7 +25,7 @@ app.use((req, res, next) => {
   };
 
   res.responseError = (err) => {
-    const status = err.code || 500;
+    const status = err.status || 500;
     logger.error({ uuid: req.uuid, method: req.method, url: req.originalUrl }, `Error ${status} (${err.message}) with payload ${req.body}.`);
     res.status(status).json({ status, error: err.message });
   };

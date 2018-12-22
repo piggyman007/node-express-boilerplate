@@ -11,7 +11,7 @@ function getParserParameters(method, url) {
   return swagger.paths[decoratedUrl][method.toLowerCase()].parameters;
 }
 
-function validate(req) {
+module.exports.validate = (req) => {
   const paramaters = getParserParameters(req.method, req.originalUrl);
   const { schema } = paramaters[0];
   const body = _.cloneDeep(req.body);
@@ -23,8 +23,4 @@ function validate(req) {
   }
 
   return validator.validate(body, schema);
-}
-
-module.exports = {
-  validate,
 };
