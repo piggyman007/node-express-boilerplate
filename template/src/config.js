@@ -3,11 +3,6 @@ module.exports = {
   shutdownTimeout: process.env.SHUTDOWN_TIMEOUT || 1000,
   logger: {
     name: '{{package.name}}',
-    level: process.env.LOG_LEVEL || 'info',
-    levels: {
-      debug: 'STDOUT',
-      info: 'STDOUT',
-      error: 'STDERR'
-    }
+    level: process.env.LOG_LEVEL || 'info'
   }
 };
