@@ -169,13 +169,13 @@ definitions:
         type: string
       issueDate:
         type: integer
-        format: int32
+        format: int64
       startDate:
         type: integer
-        format: int32
+        format: int64
       endDate:
         type: integer
-        format: int32
+        format: int64
     example:
       pdfContent: content of real pdf
       price:
@@ -203,7 +203,7 @@ definitions:
         type: string
       signDate:
         type: integer
-        format: int32
+        format: int64
     example:
       signDate: 1546018877131
       signature: xxxxxxxxxxxxx

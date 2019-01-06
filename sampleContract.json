@@ -1,0 +1,31 @@
+{
+  "content": {
+    "pdfContent": "content of real pdf",
+    "price": {
+      "value": 12345,
+      "unit": "baht"
+    },
+    "space": {
+      "value": 100,
+      "unit": "sqm"
+    },
+    "duration": {
+      "value": 1,
+      "unit": "year"
+    },
+    "note": "some detail",
+    "ownerId": "user01",
+    "tenant": "user02",
+    "issueDate": 1546018877131,
+    "startDate": 1546018877131,
+    "endDate": 1546018877131
+  },
+  "ownerSignature": {
+    "signDate": 1546018877131,
+    "signature": "xxxxxxxxxxxxx"
+  },
+  "tenantSignature": {
+    "signDate": 1546018877131,
+    "signature": "xxxxxxxxxxxxx"
+  }
+}
