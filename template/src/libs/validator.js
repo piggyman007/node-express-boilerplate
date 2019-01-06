@@ -1,26 +1,22 @@
 const Validator = require('swagger-model-validator');
 const _ = require('lodash');
-const swagger = require('../../swagger.json');
+const SwaggerParser = require('swagger-parser');
 
-function getParserParameters(method, url) {
-  let decoratedUrl = url.replace(swagger.basePath, '');
+function getParserParameters(method, url, swaggerAPI) {
+  let decoratedUrl = url.replace(swaggerAPI.basePath, '');
   if (url.endsWith('/')) {
     decoratedUrl = decoratedUrl.substring(0, url.length - 1);
   }
 
-  return swagger.paths[decoratedUrl][method.toLowerCase()].parameters;
+  return swaggerAPI.paths[decoratedUrl][method.toLowerCase()].parameters;
 }
 
-module.exports.validate = (req) => {
-  const paramaters = getParserParameters(req.method, req.originalUrl);
+module.exports.validate = async (req) => {
+  const swaggerAPI = await SwaggerParser.validate('swagger.yaml');
+  const paramaters = getParserParameters(req.method, req.originalUrl, swaggerAPI);
   const { schema } = paramaters[0];
   const body = _.cloneDeep(req.body);
-  const validator = new Validator(swagger);
-
-  if (schema.$ref) {
-    const definitionKey = schema.$ref.replace('#/definitions/', '');
-    return validator.validate(body, swagger.definitions[definitionKey]);
-  }
+  const validator = new Validator(swaggerAPI);
 
   return validator.validate(body, schema);
 };

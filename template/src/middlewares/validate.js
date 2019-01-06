@@ -3,14 +3,14 @@ const config = require('../config');
 const logger = require('../libs/logger')(config.logger);
 const formatter = require('../libs/formatter');
 
-module.exports = (req, res, next) => {
+module.exports = async (req, res, next) => {
   let validation = { valid: true };
 
   switch (req.method.toLowerCase()) {
     case 'post':
     case 'put':
     case 'patch':
-      validation = validator.validate(req);
+      validation = await validator.validate(req);
       break;
     default:
       break;
