@@ -23,7 +23,7 @@ Feel free to make it up-to-dated and better.
 |- .nycrc               // Code coverage configuration
 |- .Dockerfile          // Dockerfile
 |- mocha.opts           // Mocha test configuration
-|- swagger.json         // Swagger file that describe project strcture
+|- swagger.yaml         // Swagger file that describe project strcture
 ```
 
 ---
@@ -39,7 +39,7 @@ npm i snc -g
 Generate project structure from the sample swagger file.
 
 ```
-snc template/swagger.json -o ./my-express-api -t ./template/
+snc template/swagger.yaml -o ./my-express-api -t ./template/
 ```
 
 ---
@@ -76,7 +76,7 @@ The server will be start at the `3000` port (default port).
 
 ## Steps to call APIs
 
-Open https://editor.swagger.io and copy `template/swagger.json ` and paste there.
+Open https://editor.swagger.io and copy `template/swagger.yaml ` and paste there.
 
 Select `Schemes` to `HTTP`
 
@@ -84,7 +84,7 @@ Click 'Try it out' button at each APIs.
 
 Or you can simply use `postman` and point the url to `http://localhost:3000`
 
-The apis generated from the steps above can validate data by the rule from swagger.json, try to remove some required fields in the request body to test it. You will get some friendly error message related to the missing fields.
+The apis generated from the steps above can validate data by the rule from swagger.yaml, try to remove some required fields in the request body to test it. You will get some friendly error message related to the missing fields.
 
 ---
 
