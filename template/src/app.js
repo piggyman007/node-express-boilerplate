@@ -8,6 +8,7 @@ const config = require('./config');
 const logger = require('./libs/logger')(config.logger);
 const validate = require('./middlewares/validate');
 const formatter = require('./libs/formatter');
+const prometheus = require('./libs/prometheus');
 
 const app = express();
 
@@ -35,6 +36,12 @@ app.use((req, res, next) => {
 
   next();
 });
+
+// enable collection of default metrics
+app.use(prometheus.requestCounters);
+app.use(prometheus.responseCounters);
+prometheus.injectMetricsRoute(app);
+prometheus.startCollection();
 
 /*
  * Routes
