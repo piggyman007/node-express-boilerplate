@@ -1,0 +1,16 @@
+{
+  "globals": {
+    "it": true,
+    "describe": true
+  },
+  "plugins": [
+    "security"
+  ],
+  "extends": [
+    "airbnb",
+    "plugin:security/recommended"
+  ],
+  "rules": {
+    "comma-dangle": [0]
+  }
+}
