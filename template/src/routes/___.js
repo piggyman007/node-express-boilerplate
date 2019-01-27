@@ -1,5 +1,6 @@
 const express = require('express');
 const {{camelCase operation_name}} = require('../services/{{operation_name}}');
+const validate = require('../middlewares/validate');
 
 const router = new express.Router();
 
@@ -11,7 +12,7 @@ const router = new express.Router();
  * {{{this}}}
  {{/each}}
  */
-router.{{@key}}('{{../../subresource}}', async (req, res) => {
+router.{{@key}}('{{../../subresource}}', validate, async (req, res) => {
   const options = {
     {{#each ../parameters}}
       {{#equal this.in "query"}}
@@ -22,7 +23,7 @@ router.{{@key}}('{{../../subresource}}', async (req, res) => {
       {{/equal}}
       {{#match @../key "(post|put)"}}
         {{#equal ../in "body"}}
-    {{../name}}: req.body.{{../name}}{{#unless @last}},{{/unless}}
+    {{../name}}: req.body{{#unless @last}},{{/unless}}
         {{/equal}}
       {{/match}}
     {{/each}}

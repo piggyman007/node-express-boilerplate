@@ -6,7 +6,6 @@ const uuidv1 = require('uuid/v1');
 const helmet = require('helmet');
 const config = require('./config');
 const logger = require('./libs/logger')(config.logger);
-const validate = require('./middlewares/validate');
 const formatter = require('./libs/formatter');
 const prometheus = require('./libs/prometheus');
 
@@ -48,9 +47,9 @@ prometheus.startCollection();
  */
 {{#each @root.swagger.endpoints}}
 {{#endsWith @root.swagger.basePath '/'}}
-app.use('{{@root.swagger.basePath}}{{..}}', validate, require('./routes/{{..}}'));
+app.use('{{@root.swagger.basePath}}{{..}}', require('./routes/{{..}}'));
 {{else}}
-app.use('{{@root.swagger.basePath}}/{{..}}', validate, require('./routes/{{..}}'));
+app.use('{{@root.swagger.basePath}}/{{..}}', require('./routes/{{..}}'));
 {{/endsWith}}
 {{/each}}
 
