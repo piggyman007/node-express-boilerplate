@@ -1,15 +1,14 @@
 const Validator = require('swagger-model-validator');
-const _ = require('lodash');
 const SwaggerParser = require('swagger-parser');
 
 function getParserParameters(method, url, swaggerAPI) {
   let decoratedUrl = url.replace(swaggerAPI.basePath, '');
   if (url.endsWith('/')) {
-    decoratedUrl = decoratedUrl.substring(0, url.length - 1);  
+    decoratedUrl = decoratedUrl.substring(0, url.length - 1);
   }
 
   if (decoratedUrl.indexOf('?') !== -1) {
-    decoratedUrl = decoratedUrl.substring(0, decoratedUrl.indexOf('?'));   
+    decoratedUrl = decoratedUrl.substring(0, decoratedUrl.indexOf('?'));
   }
 
   return swaggerAPI.mappingPaths[decoratedUrl][method.toLowerCase()].parameters;
@@ -17,13 +16,13 @@ function getParserParameters(method, url, swaggerAPI) {
 
 function mapPath(path, params) {
   let mappingPath = path;
-  for (let key in params) {
+  for (const key in params) {
     mappingPath = mappingPath.replace(/{[\w]+}/, params[key]);
   }
   return mappingPath;
 }
 
-function extractSchemaPathOrQuery(paramater) {
+function extractSchemaPath(paramater) {
   return {
     type: paramater.type,
     required: paramater.required
@@ -49,18 +48,46 @@ module.exports.validate = async (req) => {
   const paramaters = getParserParameters(req.method, req.originalUrl, swaggerAPI);
 
   for (const paramater of paramaters) {
-    let data, schema;
+    let data;
+    let schema;
+
     if (paramater.in === 'path') {
-      schema = extractSchemaPathOrQuery(paramater);
+      schema = extractSchemaPath(paramater);
       data = req.params[paramater.name];
     } else if (paramater.in === 'body') {
       schema = extractSchemaBody(paramater);
       data = req.body;
-    } else if (paramater.in === 'query') {
-      schema = extractSchemaPathOrQuery(paramater);
-      data = req.query[paramater.name];
     } else {
       continue;
+    }
+
+    const result = validator.validate(data, schema);
+    if (!result.valid) {
+      return result;
+    }
+  }
+
+  const getParameters = paramaters.filter(item => item.in === 'query');
+  if (getParameters.length > 0) {
+    const schema = {
+      type: 'object',
+      required: [],
+      properties: {}
+    };
+    const data = {};
+
+    for (const parameter of getParameters) {
+      if (parameter.required) {
+        schema.required.push(parameter.name);
+      }
+
+      schema.properties[parameter.name] = parameter;
+
+      if (parameter.enum && parameter.enum.length > 0) {
+        data[parameter.name] = req.query[parameter.name];
+      } else {
+        data[parameter.name] = req.query[parameter.name] || '';
+      }
     }
 
     const result = validator.validate(data, schema);
