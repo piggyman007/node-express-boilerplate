@@ -3,10 +3,12 @@
 /**
  * Module dependencies.
  */
-require('dotenv').config();
 
 const http = require('http');
 const { createTerminus } = require('@godaddy/terminus');
+const path = require('path');
+
+require('dotenv').config({ path: path.join(__dirname, '../../', '.env'), silent: true });
 const app = require('../app');
 const config = require('../config');
 const logger = require('../libs/logger')(config.logger);
