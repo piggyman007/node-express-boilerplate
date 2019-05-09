@@ -30,7 +30,7 @@ app.use((req, res, next) => {
     const status = err.status || 500;
     const logFormat = formatter.formatResponseError(req, status, err.message);
     logger.error(logFormat.details, logFormat.msg);
-    res.status(status).json({ status, error: err.message });
+    res.status(status).json({ error: err.message });
   };
 
   next();
